@@ -4,7 +4,8 @@ This project implements the AdderNet (Adder Convolutional Neural Network) mentio
 
 The code is adapted to perform 1D additions-based convolutions on a 1D data, i.e. time-series. The 1D sequence processing is widely popular domain with applications from time-series classification to signal filtering. The 1D-AdderNet can be extremely usefull when CNN-level performance is required with reduced computational complexity.
 
-# Data Preprocessing
+# How to use
+## Data Preprocessing
 First step is reshaping the dataset  ...
 Here we assume the data equalization task with input sequence RX and the corresponding labels TX with the same shape.
 
@@ -29,7 +30,7 @@ y_train = torch.tensor(y_train, dtype=torch.float32).to(device)
 #y_test = torch.tensor(y_test, dtype=torch.float32).to(device)
 ```
 
-# Build 1D-AdderCNN
+# Define and build the 1D-AdderCNN
 
 Here is the example of building the 1D-AdderCNN with 2 hidden layers based on additions. Moreover, the final output layer (linear) is built on the concept of additions-based single convolution, to completely avoid between-layers multiplications.
 
@@ -77,6 +78,34 @@ class AdderNet1D(nn.Module):
 
       return x
 
+model_net = AdderNet1D()
+criterion = nn.MSELoss()
+optimizer = torch.optim.Adam(model_net.parameters(), lr=0.001)
+
+epochs = 1000
+batch_size = 1000
+count_epoch = 0
+
+# Train the AdderNet1D
+for epoch in range(epochs):
+    for batch_start in range(0, len(RX_train), batch_size):
+        # Batching
+        batch_end = batch_start + batch_size
+        batch_X = RX_train[batch_start:batch_end, :, :]
+        batch_y = y_train[batch_start:batch_end]
+        # Forward pass
+        outputs = model_net(batch_X)
+        loss = criterion(outputs, batch_y)
+        # Backpropagation and optimization
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+    # Test predictions
+    predictions = model_net(RX_test)
+
+    # Evaluate the inference performance each epoch.
+    # to be defined ...
 
 ```
 
