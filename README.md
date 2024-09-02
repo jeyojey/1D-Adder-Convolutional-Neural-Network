@@ -4,8 +4,10 @@ This project implements the AdderNet (Adder Convolutional Neural Network) mentio
 
 The code is adapted to perform 1D additions-based convolutions on a 1D data, i.e. time-series.
 
+
+
+
 # References 
-
-
 [1] AdderNet: Do We Really Need Multiplications in Deep Learning?, https://arxiv.org/abs/1912.13200
+
 [2] Code, https://github.com/huawei-noah/AdderNet
