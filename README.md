@@ -1,12 +1,12 @@
 # 1D-Adder-Convolutional-Neural-Network
 
-This project implements the AdderNet (Adder Convolutional Neural Network) mentioned in [AdderNet: Do We Really Need Multiplications in Deep Learning?](https://arxiv.org/abs/1912.13200) for 1D sequence processing. Original pytorch implementation of the AdderNet can be found in the [Code Repository](https://github.com/huawei-noah/AdderNet).
+This project implements the AdderNet (Adder Convolutional Neural Network) mentioned in [AdderNet: Do We Really Need Multiplications in Deep Learning?](https://arxiv.org/abs/1912.13200) for 1D sequence processing. The original PyTorch implementation of the AdderNet can be found in the [Code Repository](https://github.com/huawei-noah/AdderNet).
 
-The code is adapted to perform 1D additions-based convolutions on a 1D data, i.e. time-series. The 1D sequence processing is widely popular domain with applications from time-series classification to signal filtering. The 1D-AdderNet can be extremely usefull when CNN-level performance is required with reduced computational complexity.
+The code is adapted to perform 1D addition-based convolutions on 1D data, i.e., time-series. 1D sequence processing is a widely popular domain with applications ranging from time-series classification to signal filtering. The 1D-AdderNet can be extremely useful when CNN-level performance is required with reduced computational complexity.
 
 # Architectural changes
 
-One change to the original code [Code Repository](https://github.com/huawei-noah/AdderNet) is setting lie in the difference of the dimensionality of convolutional kernels and reshaping of the internal data sequencess. For example, one of the kernels is set to 1 to preserve the architecture 2D, however having one of the kernels dimensions as 1.
+One change from the original [Code Repository](https://github.com/huawei-noah/AdderNet) is the difference in the dimensionality of convolutional kernels and the reshaping of the internal data sequences. For example, one of the kernels is set to 1 to preserve the architecture in 2D, while having one of the kernel dimensions as 1.
 
 ```python
 def adder2d_function(X, W, stride=1, padding=0):
@@ -31,8 +31,7 @@ def adder2d_function(X, W, stride=1, padding=0):
 
 # How to use
 ## Data Preprocessing
-First step is reshaping the dataset  ...
-Here we assume the data equalization task with input sequence RX and the corresponding labels TX with the same shape.
+The first step is reshaping the dataset. Here we assume the data equalization task with input sequence RX and the corresponding labels TX with the same shape.
 
 ```python
 # RX is a numpy array of recieved symbols (with noise)
@@ -59,7 +58,7 @@ y_train = torch.tensor(y_train, dtype=torch.float32).to(device)
 
 ## Define and build the 1D-AdderCNN
 
-Here is the example of building the 1D-AdderCNN with 2 hidden layers based on additions. Moreover, the final output layer (linear) is built on the concept of additions-based single convolution, to completely avoid between-layers multiplications.
+Here is an example of building the 1D-AdderCNN with 2 hidden layers based on additions. Moreover, the final output layer (linear) is built on the concept of additions-based single convolution to completely avoid between-layer multiplications.
 
 ```python
 import AdderNet1D
@@ -138,7 +137,7 @@ for epoch in range(epochs):
 
 ```
 # Citing
-The concept of AdderNet application for short-reach optical channel equalization for single dimensional (1D) signal processing has been published by "Y. Osadchuk, et al., “Adder Convolutional Neural Network Equalizer for RRM-based O-band Optical Amplification-free 200 GBd OOK Transmission,” in 2024 European Conference on Optical Communication (ECOC), 2024"
+The concept of AdderNet application for short-reach optical channel equalization for single-dimensional (1D) signal processing has been published by Y. Osadchuk et al., “Adder Convolutional Neural Network Equalizer for RRM-based O-band Optical Amplification-free 200 GBd OOK Transmission,” in 2024 European Conference on Optical Communication (ECOC), 2024.
 
 # References 
 [1] [AdderNet: Do We Really Need Multiplications in Deep Learning?](https://arxiv.org/abs/1912.13200)
