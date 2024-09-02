@@ -34,13 +34,13 @@ y_train = torch.tensor(y_train, dtype=torch.float32).to(device)
 Here is the example of building the 1D-AdderCNN with 2 hidden layers based on additions. Moreover, the final output layer (linear) is built on the concept of additions-based single convolution, to completely avoid between-layers multiplications.
 
 ```python
-import 1Dadder
+import AdderNet1D
 import torch
 import torch.nn as nn
 
-class 1DAdderNet(nn.Module):
+class AdderNet1D(nn.Module):
     def __init__(self):
-      super(1DAdderNet, self).__init__()
+      super(AdderNet1D, self).__init__()
       filters1 = 15
       f_size1 = 5
       filters2 = 15
