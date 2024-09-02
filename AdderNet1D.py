@@ -13,7 +13,7 @@ import numpy as np
 from torch.autograd import Function
 import math
 
-def adder2d_function(X, W, stride=1, padding=0):
+def adder1d_function(X, W, stride=1, padding=0):
     n_filters, d_filter, h_filter, w_filter = W.size()
     n_x, d_x, h_x, w_x = X.size()
 
@@ -48,10 +48,10 @@ class adder(Function):
         
         return grad_W_col, grad_X_col
     
-class adder2d(nn.Module):
+class adder1d(nn.Module):
 
     def __init__(self,input_channel,output_channel,kernel_size, stride=1, padding=0, bias = False):
-        super(adder2d, self).__init__()
+        super(adder1d, self).__init__()
         self.stride = stride
         self.padding = padding
         self.input_channel = input_channel
@@ -63,7 +63,7 @@ class adder2d(nn.Module):
             self.b = torch.nn.Parameter(nn.init.uniform_(torch.zeros(output_channel)))
 
     def forward(self, x):
-        output = adder2d_function(x,self.adder, self.stride, self.padding)
+        output = adder1d_function(x,self.adder, self.stride, self.padding)
         if self.bias:
             output += self.b.unsqueeze(0).unsqueeze(2).unsqueeze(3)
         
