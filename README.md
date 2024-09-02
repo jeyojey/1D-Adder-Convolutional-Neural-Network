@@ -4,6 +4,31 @@ This project implements the AdderNet (Adder Convolutional Neural Network) mentio
 
 The code is adapted to perform 1D additions-based convolutions on a 1D data, i.e. time-series. The 1D sequence processing is widely popular domain with applications from time-series classification to signal filtering. The 1D-AdderNet can be extremely usefull when CNN-level performance is required with reduced computational complexity.
 
+# Architectural changes
+
+One change to the original code [Code Repository](https://github.com/huawei-noah/AdderNet) is setting lie in the difference of the dimensionality of convolutional kernels and reshaping of the internal data sequencess. For example, one of the kernels is set to 1 to preserve the architecture 2D, however having one of the kernels dimensions as 1.
+
+```python
+def adder2d_function(X, W, stride=1, padding=0):
+    n_filters, d_filter, h_filter, w_filter = W.size()
+    n_x, d_x, h_x, w_x = X.size()
+
+    h_out = (h_x - h_filter + 2 * padding) / stride + 1
+    w_out = (w_x - w_filter + 2 * padding) / stride + 1
+
+    h_out, w_out = int(h_out), int(w_out)
+    X_col = torch.nn.functional.unfold(X.view(1, -1, h_x, w_x), h_filter, dilation=1, padding=padding, stride=stride).view(n_x, -1, h_out*w_out)
+    X_col = X_col.permute(1,2,0).contiguous().view(X_col.size(1),-1)
+    W_col = W.view(n_filters, -1)
+    
+    out = adder.apply(W_col,X_col)
+    
+    out = out.view(n_filters, h_out, w_out, n_x)
+    out = out.permute(3, 0, 1, 2).contiguous()
+    
+    return out
+```
+
 # How to use
 ## Data Preprocessing
 First step is reshaping the dataset  ...
