@@ -16,6 +16,7 @@ Here we assume the data equalization task with input sequence RX and the corresp
 import torch
 import create_dataset_symbols_multi
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+PAM4_levels = np.unique(TX).real
 
 # Create dataset with memory shifting each step by 1 symbol
 steps = 8                   # number of previous or forward steps to define the memory window
@@ -28,9 +29,10 @@ RX_train = torch.tensor(RX_train.reshape((len(RX_train), 1, syms_in, 1)), dtype=
 RX_test = torch.tensor(RX_test.reshape((len(RX_test), 1, syms_in, 1)), dtype=torch.float32).to(device)
 y_train = torch.tensor(y_train, dtype=torch.float32).to(device)
 #y_test = torch.tensor(y_test, dtype=torch.float32).to(device)
+
 ```
 
-# Define and build the 1D-AdderCNN
+## Define and build the 1D-AdderCNN
 
 Here is the example of building the 1D-AdderCNN with 2 hidden layers based on additions. Moreover, the final output layer (linear) is built on the concept of additions-based single convolution, to completely avoid between-layers multiplications.
 
@@ -38,6 +40,7 @@ Here is the example of building the 1D-AdderCNN with 2 hidden layers based on ad
 import AdderNet1D
 import torch
 import torch.nn as nn
+import BER_calc
 
 class AdderNet1D(nn.Module):
     def __init__(self):
@@ -104,10 +107,13 @@ for epoch in range(epochs):
     # Test predictions
     predictions = model_net(RX_test)
 
-    # Evaluate the inference performance each epoch.
-    # to be defined ...
+    # Evaluate the inference performance each epoch and calculate BER.
+    ###############################     Calculate BER - CLASSIC way     ############################################
+    BER = np.round(BER_calc(predictions.data.cpu().numpy().flatten()[10:], y_test.flatten()[10:], PAM4_levels), 9)
 
 ```
+# Citing
+The concept of AdderNet application for short-reach optical channel equalization for single dimensional (1D) signal processing has been published by "Y. Osadchuk, et al., “Adder Convolutional Neural Network Equalizer for RRM-based O-band Optical Amplification-free 200 GBd OOK Transmission,” in 2024 European Conference on Optical Communication (ECOC), 2024"
 
 # References 
 [1] [AdderNet: Do We Really Need Multiplications in Deep Learning?](https://arxiv.org/abs/1912.13200)
