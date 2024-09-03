@@ -38,7 +38,7 @@ The first step is reshaping the dataset. Here we assume the data equalization ta
 # TX is a numpy array of transmitted symbols (labels)
 
 import torch
-import create_dataset_symbols_multi
+from functions import create_dataset_symbols_multi
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 PAM4_levels = np.unique(TX).real
 
@@ -64,7 +64,7 @@ Here is an example of building the 1D-AdderCNN with 2 hidden layers based on add
 import AdderNet1D
 import torch
 import torch.nn as nn
-import BER_calc
+from functions import BER_calc
 
 class AdderNet1D(nn.Module):
     def __init__(self):
