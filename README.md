@@ -78,15 +78,15 @@ class AdderNet1D(nn.Module):
       ################################################################################################################################
       self.adder1 = adder.adder1d(input_channel=1, output_channel=filters1, kernel_size=f_size1, stride=1, bias=True).to(self.device)
       self.batch1 = nn.BatchNorm2d(filters1).to(self.device)
-      self.acti1 = nn.Sigmoid()
+      self.acti1 = nn.SELU()
       ################################################################################################################################
       self.adder2 = adder.adder1d(input_channel=filters1, output_channel=filters2, kernel_size=f_size2, stride=1, bias=True).to(self.device)
       self.batch2 = nn.BatchNorm2d(filters2).to(self.device)
-      self.acti2 = nn.Sigmoid()
+      self.acti2 = nn.ReLU()
       ################################################################################################################################
       self.linear = adder.adder1d(input_channel=filters2, output_channel=1, kernel_size=int((syms_in - f_size1 + 1) - f_size2 + 1), stride=1, bias=True).to(self.device)
       self.batch3 = nn.BatchNorm2d(1).to(self.device)
-      self.acti_out = nn.Sigmoid()
+      self.acti_out = nn.ELU()
       self.flat = nn.Flatten()
 
     def forward(self, x):
